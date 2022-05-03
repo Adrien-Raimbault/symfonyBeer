@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Beer index{% endblock %}
+
+{% block body %}
+    <h1>Beer index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Catégorie</th>
+                <th>Skills</th>
+                <th>Description</th>
+                <th>Created_at</th>
+                <th>Auteur</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for beer in beers %}
+            <tr>
+                <td>{{ beer.id }}</td>
+                <td>{{ beer.title }}</td>
+                <td>{% if beer.cat is not empty %}
+                        {{ beer.cat.name }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% for skill in beer.skills %}
+                        {{ skill.titre}},
+                    {% endfor %}
+                </td>
+                <td>{{ beer.description }}</td>
+                <td>{{ beer.createdAt ? beer.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ beer.user.email }}</td>
+                {# appel de la clé étrangère user dans beer #}
+                <td>
+                    <a href="{{ path('app_beer_show', {'id': beer.id}) }}">show</a>
+                    <a href="{{ path('app_beer_edit', {'id': beer.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_beer_new') }}">Create new</a>
+{% endblock %}
